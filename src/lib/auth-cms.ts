@@ -64,7 +64,7 @@ export const { handlers: cmsHandlers, auth: cmsAuth, signIn: cmsSignIn, signOut:
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: false,
+        secure: process.env.NODE_ENV === "production",
       },
     },
   },

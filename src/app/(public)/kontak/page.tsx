@@ -2,18 +2,56 @@ import { prisma } from "@/lib/prisma"
 import { Phone, Mail, MapPin, MessageCircle, PhoneCall } from "lucide-react"
 import { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Hubungi Kami",
   description: "Informasi kontak dan alamat KPU Provinsi Jawa Tengah",
 }
 
+const DUMMY_KONTAK = [
+  {
+    id: "kontak-1",
+    label: "Sekretariat Umum",
+    telepon: "(024) 8311523",
+    email: "kpu-jatengprov@kpu.go.id",
+    whatsapp: "628112345678",
+    urutan: 1,
+    aktif: true,
+  },
+  {
+    id: "kontak-2",
+    label: "Bagian Humas",
+    telepon: "(024) 8311524",
+    email: "humas.kpu-jateng@kpu.go.id",
+    urutan: 2,
+    aktif: true,
+  },
+  {
+    id: "kontak-3",
+    label: "Bagian IT & Teknis",
+    telepon: "(024) 8311525",
+    email: "it.kpu-jateng@kpu.go.id",
+    urutan: 3,
+    aktif: true,
+  },
+]
+
+const DUMMY_TENTANG_MIN = {
+  alamat: "Jl. Veteran No.1A, Semarang, Jawa Tengah 50233",
+  mapEmbedUrl: "https://maps.google.com/maps?q=KPU%20Provinsi%20Jawa%20Tengah&t=&z=15&ie=UTF8&iwloc=&output=embed",
+}
+
 export default async function KontakPage() {
-  const kontak = await prisma.kontakKPU.findMany({
+  let dbKontak = await prisma.kontakKPU.findMany({
     where: { aktif: true },
     orderBy: { urutan: "asc" },
   })
 
-  const tentang = await prisma.tentangKPU.findFirst({ where: { id: "singleton" } })
+  let dbTentang = await prisma.tentangKPU.findFirst({ where: { id: "singleton" } })
+
+  const kontak = dbKontak.length > 0 ? dbKontak : DUMMY_KONTAK
+  const tentang = dbTentang ?? DUMMY_TENTANG_MIN
 
   return (
     <div className="bg-surface-container-lowest min-h-screen">

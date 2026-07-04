@@ -3,20 +3,77 @@ import { prisma } from "@/lib/prisma"
 import { BookOpen, Calendar, ChevronRight, ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Berita & Informasi",
   description: "Kumpulan berita dan informasi terbaru KPU Provinsi Jawa Tengah",
 }
+
+const DUMMY_NEWS = [
+  {
+    id: "1",
+    judul: "KPU JATENG TURUT BERPARTISIPASI DI JATENG FAIR 2026",
+    ringkasan: "Semarang, Jum'at (19/6/2026) - KPU Provinsi Jawa Tengah yang diwakili Kabag Parmas dan SDM, Kiki Rizka Ningsih, menghadiri kegiatan rapat yang diselenggarakan oleh Kesbangpol Jateng, bersama instansi terkait dan organisasi masyarakat guna menyukseskan kegiatan pameran Jateng Fair Tahun 2026 di PRPP.",
+    gambarUrl: "/berita-1.png",
+    kategori: "Sosialisasi",
+    sumber: "Humas KPU",
+    slug: "jateng-fair",
+    createdAt: new Date("2026-06-19"),
+  },
+  {
+    id: "2",
+    judul: "RAPAT KOORDINASI PENYIAPAN RUMUSAN KEBIJAKAN PERMASALAHAN PENGGANTIAN ANTARWAKTU ANGGOTA DPRD PROVINSI DAN DPRD KABUPATEN/KOTA",
+    ringkasan: "Ketua divisi teknis penyelenggaraan pemilu KPU Provinsi Jawa Tengah menghadiri rapat koordinasi penyiapan rumusan kebijakan terkait permasalahan penggantian antarwaktu (PAW) anggota DPRD Provinsi dan DPRD Kabupaten/Kota. Kegiatan ini diselenggarakan sebagai forum koordinasi dan konsolidasi untuk membahas berbagai aspek regulasi serta kendala yang muncul dalam proses PAW di daerah.",
+    gambarUrl: "/berita-2.png",
+    kategori: "Rapat Koordinasi",
+    sumber: "Divisi Teknis",
+    slug: "rakor-paw",
+    createdAt: new Date("2026-06-23"),
+  },
+  {
+    id: "3",
+    judul: "KETUA KPU PROVINSI JAWA TENGAH HADIRI PENANDATANGANAN NOTA KESEPAKATAN DAN TALK SHOW PENDIDIKAN PEMILIH DI SUKOHARJO",
+    ringkasan: "Ketua KPU Provinsi Jawa Tengah, Handi Tri Ujiono, menghadiri kegiatan penandatanganan nota kesepakatan antara KPU Kabupaten Sukoharjo dengan Pemerintah Kabupaten Sukoharjo. Penandatanganan nota kesepakatan tersebut menjadi wujud komitmen bersama dalam memperkuat sinergi antara penyelenggara pemilu dan pemerintah daerah untuk mendukung pelaksanaan pendidikan pemilih yang berkelanjutan.",
+    gambarUrl: "/berita-3.png",
+    kategori: "Pendidikan Pemilih",
+    sumber: "Ketua KPU",
+    slug: "sukoharjo",
+    createdAt: new Date("2026-06-22"),
+  },
+  {
+    id: "4",
+    judul: "AUDIENSI KE FISIP UNNES, KPU JATENG DORONG KERJASAMA SOSIALISASI PENDIDIKAN PEMILIH",
+    ringkasan: "Semarang — Komisi Pemilihan Umum (KPU) Provinsi Jawa Tengah melakukan kunjungan audiensi ke Fakultas Ilmu Sosial dan Ilmu Politik (FISIP) Universitas Negeri Semarang (UNNES), Rabu (25/6/2026). Langkah ini diambil sebagai upaya memperkuat sinergi kelembagaan guna meningkatkan kualitas pelaksanaan pemilu dan pendidikan pemilih di Jawa Tengah.",
+    gambarUrl: "/berita-4.png",
+    kategori: "Pendidikan Pemilih",
+    sumber: "Humas KPU",
+    slug: "audiensi-unnes",
+    createdAt: new Date("2026-06-25"),
+  },
+  {
+    id: "5",
+    judul: "KPU PROVINSI JAWA TENGAH GELAR LOMBA PADUAN SUARA MARS KPU",
+    ringkasan: "Komisi Pemilihan Umum Provinsi Jawa Tengah menyelenggarakan Lomba Paduan Suara Mars KPU sebagai bagian dari upaya memperkuat identitas kelembagaan dan semangat kebersamaan di lingkungan penyelenggara pemilu. Kegiatan ini diikuti oleh perwakilan bagian internal KPU Provinsi Jawa Tengah yang menampilkan kemampuan vokal dan kekompakan tim masing-masing dalam membawakan lagu kebanggaan lembaga.",
+    gambarUrl: "/berita-5.jpg",
+    kategori: "Publikasi",
+    sumber: "Humas KPU",
+    slug: "lomba-paduan-suara",
+    createdAt: new Date("2026-06-17"),
+  }
+]
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(date)
 }
 
 export default async function BeritaListPage() {
-  const newsList = await prisma.berita.findMany({
+  let dbNews = await prisma.berita.findMany({
     where: { published: true },
     orderBy: { createdAt: "desc" },
   })
+
+  const newsList = dbNews.length > 0 ? dbNews : DUMMY_NEWS
 
   return (
     <div className="bg-surface-container-lowest min-h-screen">

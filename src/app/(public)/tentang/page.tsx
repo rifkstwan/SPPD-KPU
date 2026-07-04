@@ -3,15 +3,34 @@ import { Building2, Target, Flag, MapPin, Phone, Mail, ArrowLeft } from "lucide-
 import { Metadata } from "next"
 import Link from "next/link"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Tentang KPU",
   description: "Profil, Visi, dan Misi KPU Provinsi Jawa Tengah",
 }
 
+const DUMMY_TENTANG = {
+  id: "singleton",
+  profil: "KPU Provinsi Jawa Tengah adalah lembaga penyelenggara pemilihan umum yang bersifat nasional, tetap, dan mandiri.",
+  visi: "Terwujudnya KPU sebagai penyelenggara pemilihan umum yang memiliki integritas, profesional, mandiri, transparan, dan akuntabel.",
+  misi: JSON.stringify([
+    "Membangun SDM yang kompeten dan berintegritas",
+    "Menyelenggarakan pemilu yang demokratis dan berkualitas",
+    "Meningkatkan partisipasi masyarakat dalam pemilu",
+  ]),
+  alamat: "Jl. Veteran No.1A, Semarang, Jawa Tengah 50233",
+  telepon: "(024) 8311523",
+  email: "kpu-jatengprov@kpu.go.id",
+  mapEmbedUrl: "https://maps.google.com/maps?q=KPU%20Provinsi%20Jawa%20Tengah&t=&z=15&ie=UTF8&iwloc=&output=embed",
+}
+
 export default async function TentangPage() {
-  const data = await prisma.tentangKPU.findFirst({
+  let dbData = await prisma.tentangKPU.findFirst({
     where: { id: "singleton" },
   })
+
+  const data = dbData ?? DUMMY_TENTANG
 
   const misi = (() => {
     try { return JSON.parse(data?.misi ?? "[]") } catch { return [] }

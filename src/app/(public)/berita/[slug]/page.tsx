@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma"
 import { Calendar, User, ChevronLeft, BookOpen } from "lucide-react"
 import { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 // Dummy data for fallback if db is empty during initial demo
 const DUMMY_NEWS = [
   {

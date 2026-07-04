@@ -4,6 +4,9 @@ import { NewsSection } from "@/components/public/news-section"
 import { PublicationsSection } from "@/components/public/publications-section"
 import { OpinionSection } from "@/components/public/opinion-section"
 
+export const dynamic = "force-dynamic"
+
+
 export default function HomePage() {
   return (
     <>

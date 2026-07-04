@@ -3,16 +3,68 @@ import { ShieldCheck, ClipboardList, Clock, ArrowRight, Phone, ArrowLeft } from 
 import Link from "next/link"
 import { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Informasi Layanan Publik",
   description: "Layanan informasi publik KPU Provinsi Jawa Tengah",
 }
 
+const DUMMY_LAYANAN = [
+  {
+    id: "layanan-1",
+    namaLayanan: "Layanan Informasi Pemilih",
+    persyaratan: "KTP Elektronik yang masih berlaku",
+    jamPelayanan: "Senin - Jumat, 08.00 - 16.00 WIB",
+    alurPelayanan: JSON.stringify([
+      "Datang ke kantor KPU",
+      "Ambil nomor antrian",
+      "Serahkan KTP ke petugas",
+      "Petugas mengecek data di Sidalih",
+      "Terima bukti cek data pemilih",
+    ]),
+    urutan: 1,
+    aktif: true,
+  },
+  {
+    id: "layanan-2",
+    namaLayanan: "Layanan Pendaftaran Calon",
+    persyaratan: "Formulir pendaftaran, KTP, ijazah terakhir, SKCK, surat keterangan sehat",
+    jamPelayanan: "Senin - Jumat, 08.00 - 15.00 WIB",
+    alurPelayanan: JSON.stringify([
+      "Download formulir di website KPU",
+      "Lengkapi berkas persyaratan",
+      "Serahkan berkas ke loket pendaftaran",
+      "Verifikasi berkas oleh petugas",
+      "Terima tanda terima pendaftaran",
+    ]),
+    urutan: 2,
+    aktif: true,
+  },
+  {
+    id: "layanan-3",
+    namaLayanan: "Layanan Pengaduan",
+    persyaratan: "Identitas pelapor dan bukti pendukung",
+    jamPelayanan: "Senin - Jumat, 08.00 - 16.00 WIB",
+    alurPelayanan: JSON.stringify([
+      "Isi formulir pengaduan online atau datang langsung",
+      "Lampirkan bukti pendukung",
+      "Terima nomor registrasi pengaduan",
+      "KPU memproses dalam 3 hari kerja",
+      "Terima jawaban/tindak lanjut",
+    ]),
+    urutan: 3,
+    aktif: true,
+  },
+]
+
 export default async function LayananPage() {
-  const layanan = await prisma.informasiLayanan.findMany({
+  let dbLayanan = await prisma.informasiLayanan.findMany({
     where: { aktif: true },
     orderBy: { urutan: "asc" },
   })
+
+  const layanan = dbLayanan.length > 0 ? dbLayanan : DUMMY_LAYANAN
 
   return (
     <div className="bg-surface-container-lowest min-h-screen">
