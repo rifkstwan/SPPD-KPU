@@ -3,6 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+// Clean environment variables of any surrounding quotes
+for (const key of ["NEXTAUTH_URL", "AUTH_URL", "APP_URL", "AUTH_SECRET"]) {
+  if (process.env[key]) {
+    process.env[key] = process.env[key]!.replace(/^["']|["']$/g, "")
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   secret: process.env.AUTH_SECRET || "sppd_kpu_jateng_secret_key_default_2026",
