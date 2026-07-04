@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs"
 
 export const { handlers: cmsHandlers, auth: cmsAuth, signIn: cmsSignIn, signOut: cmsSignOut } = NextAuth({
   basePath: "/api/auth/cms",
-  secret: process.env.CMS_NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
+  secret: process.env.CMS_NEXTAUTH_SECRET ?? process.env.AUTH_SECRET ?? "cms_sppd_kpu_jateng_secret_key_default_2026",
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
