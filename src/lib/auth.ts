@@ -10,6 +10,17 @@ for (const key of ["NEXTAUTH_URL", "AUTH_URL", "APP_URL", "AUTH_SECRET"]) {
   }
 }
 
+if (process.env.NODE_ENV === "production") {
+  if (!process.env.NEXTAUTH_URL || process.env.NEXTAUTH_URL.includes("localhost")) {
+    const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || "kpu-jateng-liard.vercel.app"
+    process.env.NEXTAUTH_URL = `https://${host}`
+  }
+  if (!process.env.APP_URL || process.env.APP_URL.includes("localhost")) {
+    const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || "kpu-jateng-liard.vercel.app"
+    process.env.APP_URL = `https://${host}`
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   secret: process.env.AUTH_SECRET || "sppd_kpu_jateng_secret_key_default_2026",

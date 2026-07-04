@@ -10,6 +10,17 @@ for (const key of ["NEXTAUTH_URL", "AUTH_URL", "APP_URL", "AUTH_SECRET", "CMS_NE
   }
 }
 
+if (process.env.NODE_ENV === "production") {
+  if (!process.env.NEXTAUTH_URL || process.env.NEXTAUTH_URL.includes("localhost")) {
+    const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || "kpu-jateng-liard.vercel.app"
+    process.env.NEXTAUTH_URL = `https://${host}`
+  }
+  if (!process.env.APP_URL || process.env.APP_URL.includes("localhost")) {
+    const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || "kpu-jateng-liard.vercel.app"
+    process.env.APP_URL = `https://${host}`
+  }
+}
+
 export const { handlers: cmsHandlers, auth: cmsAuth, signIn: cmsSignIn, signOut: cmsSignOut } = NextAuth({
   basePath: "/api/auth/cms",
   trustHost: true,
